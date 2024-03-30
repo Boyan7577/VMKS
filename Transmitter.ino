@@ -11,6 +11,7 @@ const int joystickX = A0;
 const int joystickY = A1;
 
 void setup() {
+  Serial.begin(9600);
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_LOW);
@@ -26,6 +27,12 @@ void loop() {
 
   // Send data packet
   radio.write(&data, sizeof(data));
+
+  // Print joystick readings to serial monitor
+  Serial.print("X Value: ");
+  Serial.print(xValue);
+  Serial.print("\tY Value: ");
+  Serial.println(yValue);
 
   delay(50); // Adjust delay as needed for communication stability
 }
