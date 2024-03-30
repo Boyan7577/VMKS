@@ -20,6 +20,8 @@ const int IN4_PIN = 4; // IN4 pin of L298N
 int currentSpeed = 80;
 
 void setup() {
+  Serial.begin(9600);
+  
   pinMode(ENA_PIN, OUTPUT);
   pinMode(IN1_PIN, OUTPUT);
   pinMode(IN2_PIN, OUTPUT);
@@ -40,6 +42,12 @@ void loop() {
 
     int xValue = data[0];
     int yValue = data[1];
+
+    // Print joystick readings to serial monitor
+    Serial.print("X Value: ");
+    Serial.print(xValue);
+    Serial.print("\tY Value: ");
+    Serial.println(yValue);
 
     int mappedYSpeed = map(yValue, 0, 1023, -currentSpeed, currentSpeed);
     int mappedXSpeed = map(xValue, 0, 1023, -currentSpeed, currentSpeed);
