@@ -2,7 +2,7 @@
 #include <nRF24L01.h>
 #include <RF24.h>
 
-RF24 radio(9, 8); // CE, CSN
+RF24 radio(7, 8); // CE, CSN
 
 const byte address[6] = "00001";
 
@@ -11,11 +11,12 @@ const int joystickX = A0;
 const int joystickY = A1;
 
 void setup() {
-  Serial.begin(9600);
+  
   radio.begin();
   radio.openWritingPipe(address);
   radio.setPALevel(RF24_PA_LOW);
-  //radio.stopListening();
+  radio.stopListening();
+  Serial.begin(9600);
 }
 
 void loop() {
@@ -34,5 +35,5 @@ void loop() {
   Serial.print("\tY Value: ");
   Serial.println(yValue);
 
-  delay(50); // Adjust delay as needed for communication stability
+  delay(100); // Adjust delay as needed for communication stability
 }

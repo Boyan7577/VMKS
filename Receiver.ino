@@ -43,6 +43,10 @@ void loop() {
     int xValue = data[0];
     int yValue = data[1];
 
+    // Reverse the joystick values
+    xValue = 1023 - xValue;
+    yValue = 1023 - yValue;
+
     // Print joystick readings to serial monitor
     Serial.print("X Value: ");
     Serial.print(xValue);
@@ -66,19 +70,25 @@ void loop() {
     analogWrite(ENA_PIN, abs(motorSpeedA));
     analogWrite(ENB_PIN, abs(motorSpeedB));
 
-    if (motorSpeedA > 0) {
-      digitalWrite(IN1_PIN, HIGH);
+    if (motorSpeedA > 0) 
+    {
+      digitalWrite(IN1_PIN, HIGH); // Forward direction
       digitalWrite(IN2_PIN, LOW);
-    } else {
-      digitalWrite(IN1_PIN, LOW);
+    } 
+    else 
+    {
+      digitalWrite(IN1_PIN, LOW); // Backward direction
       digitalWrite(IN2_PIN, HIGH);
     }
 
-    if (motorSpeedB > 0) {
-      digitalWrite(IN3_PIN, HIGH);
+    if (motorSpeedB > 0) 
+    {
+      digitalWrite(IN3_PIN, HIGH); // Forward direction
       digitalWrite(IN4_PIN, LOW);
-    } else {
-      digitalWrite(IN3_PIN, LOW);
+    } 
+    else 
+    {
+      digitalWrite(IN3_PIN, LOW); // Backward direction
       digitalWrite(IN4_PIN, HIGH);
     }
   }
