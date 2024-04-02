@@ -16,8 +16,23 @@ const int ENB_PIN = 10; // EN2 pin of L298N
 const int IN3_PIN = 3; // IN3 pin of L298N
 const int IN4_PIN = 4; // IN4 pin of L298N
 
+// Buzzer Pin
+const int BUZZER_PIN = 11;
+
+// LED Pins
+const int LED1_PIN = 45;
+const int LED2_PIN = 36;
+const int LED3_PIN = 43;
+const int LED4_PIN = 38;
+const int LED5_PIN = 40;
+
 // Current speed of motors
 int currentSpeed = 80;
+
+// Flame sensor Pin
+const int FLAME_SENSOR_PIN = A0;
+
+bool fireDetected = false;
 
 void setup() {
   Serial.begin(9600);
@@ -29,13 +44,28 @@ void setup() {
   pinMode(IN3_PIN, OUTPUT);
   pinMode(IN4_PIN, OUTPUT);
 
+  pinMode(BUZZER_PIN, OUTPUT);
+
+  pinMode(LED1_PIN, OUTPUT);
+  pinMode(LED2_PIN, OUTPUT);
+  pinMode(LED3_PIN, OUTPUT);
+  pinMode(LED4_PIN, OUTPUT);
+  pinMode(LED5_PIN, OUTPUT);
+
+  pinMode(FLAME_SENSOR_PIN, INPUT);
+
   radio.begin();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_LOW);
   radio.startListening();
+
+  // Turn on LED1 and LED3
+  digitalWrite(LED1_PIN, HIGH);
+  digitalWrite(LED3_PIN, HIGH);
 }
 
-void loop() {
+void loop() 
+{
   if (radio.available()) {
     int data[2];
     radio.read(&data, sizeof(data));
@@ -62,9 +92,22 @@ void loop() {
     if (xValue < 400) {
       motorSpeedA = 0;
       motorSpeedB += mappedXSpeed;
-    } else if (xValue > 600) {
+    } 
+    else if (xValue > 600) 
+    {
       motorSpeedB = 0;
       motorSpeedA -= mappedXSpeed;
+      
+      // Turn on LED4 and LED5 when moving backward
+      digitalWrite(LED4_PIN, HIGH);
+      digitalWrite(LED5_PIN, HIGH);
+    }
+
+    else 
+    {
+      // Turn off LED4 and LED5 when not moving backward
+      digitalWrite(LED4_PIN, LOW);
+      digitalWrite(LED5_PIN, LOW);
     }
 
     analogWrite(ENA_PIN, abs(motorSpeedA));
@@ -91,5 +134,22 @@ void loop() {
       digitalWrite(IN3_PIN, LOW); // Backward direction
       digitalWrite(IN4_PIN, HIGH);
     }
+  }
+
+  // Check flame sensor
+  int flameSensorValue = analogRead(FLAME_SENSOR_PIN);
+  if (flameSensorValue <= 500) 
+  {
+    // Fire detected
+    digitalWrite(LED2_PIN, HIGH);
+    tone(BUZZER_PIN, 1000); // Make a constant sound
+    fireDetected = true;
+  } 
+  else if (fireDetected) 
+  {
+    // Fire extinguished
+    digitalWrite(LED2_PIN, LOW);
+    noTone(BUZZER_PIN);
+    fireDetected = false;
   }
 }
