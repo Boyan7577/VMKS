@@ -1,6 +1,7 @@
 #include <SPI.h>
 #include <nRF24L01.h>
 #include <RF24.h>
+#include <Servo.h>
 
 RF24 radio(7, 8); // CE, CSN
 
@@ -32,6 +33,11 @@ int currentSpeed = 80;
 // Flame sensor Pin
 const int FLAME_SENSOR_PIN = A0;
 
+// Servo motor pin
+const int SERVO_PIN = 2;
+
+Servo servo;
+
 bool fireDetected = false;
 
 void setup() {
@@ -54,6 +60,8 @@ void setup() {
 
   pinMode(FLAME_SENSOR_PIN, INPUT);
 
+  servo.attach(SERVO_PIN);
+
   radio.begin();
   radio.openReadingPipe(0, address);
   radio.setPALevel(RF24_PA_LOW);
@@ -67,24 +75,30 @@ void setup() {
 void loop() 
 {
   if (radio.available()) {
-    int data[2];
+    int data[3];
     radio.read(&data, sizeof(data));
 
     int xValue = data[0];
     int yValue = data[1];
+    int xValueServo = data[2];
 
     // Reverse the joystick values
     xValue = 1023 - xValue;
     yValue = 1023 - yValue;
 
     // Print joystick readings to serial monitor
-    Serial.print("X Value: ");
-    Serial.print(xValue);
+    Serial.print("Motor Control - X Value: ");
+    Serial.println(xValue);
     Serial.print("\tY Value: ");
     Serial.println(yValue);
+    
+    Serial.print("Servo Control - X Value: ");
+    Serial.println(xValueServo);
 
     int mappedYSpeed = map(yValue, 0, 1023, -currentSpeed, currentSpeed);
     int mappedXSpeed = map(xValue, 0, 1023, -currentSpeed, currentSpeed);
+    int mappedXServo = map(xValueServo, 0, 1023, 45, 135); // Map x-axis value to servo angle
+    servo.write(mappedXServo);
 
     int motorSpeedA = mappedYSpeed;
     int motorSpeedB = mappedYSpeed;
@@ -98,16 +112,6 @@ void loop()
       motorSpeedB = 0;
       motorSpeedA -= mappedXSpeed;
       
-      // Turn on LED4 and LED5 when moving backward
-      digitalWrite(LED4_PIN, HIGH);
-      digitalWrite(LED5_PIN, HIGH);
-    }
-
-    else 
-    {
-      // Turn off LED4 and LED5 when not moving backward
-      digitalWrite(LED4_PIN, LOW);
-      digitalWrite(LED5_PIN, LOW);
     }
 
     analogWrite(ENA_PIN, abs(motorSpeedA));
@@ -117,22 +121,35 @@ void loop()
     {
       digitalWrite(IN1_PIN, HIGH); // Forward direction
       digitalWrite(IN2_PIN, LOW);
-    } 
+      // Turn on LED4 and LED5 when moving backward
+      digitalWrite(LED4_PIN, HIGH);
+      digitalWrite(LED5_PIN, HIGH);
+    }
+     
     else 
     {
       digitalWrite(IN1_PIN, LOW); // Backward direction
       digitalWrite(IN2_PIN, HIGH);
+
+      digitalWrite(LED4_PIN, LOW);
+      digitalWrite(LED5_PIN, LOW);
     }
 
     if (motorSpeedB > 0) 
     {
       digitalWrite(IN3_PIN, HIGH); // Forward direction
       digitalWrite(IN4_PIN, LOW);
+
+      digitalWrite(LED4_PIN, HIGH);
+      digitalWrite(LED5_PIN, HIGH);
     } 
     else 
     {
       digitalWrite(IN3_PIN, LOW); // Backward direction
       digitalWrite(IN4_PIN, HIGH);
+
+      digitalWrite(LED4_PIN, LOW);
+      digitalWrite(LED5_PIN, LOW);
     }
   }
 
