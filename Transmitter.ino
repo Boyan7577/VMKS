@@ -14,6 +14,11 @@ const int joystickY = A1;
 const int servoJoystickX = A2;
 const int servoJoystickY = A3;
 
+// Water Pump Control Joystick Pin
+const int pumpControlPin = 2; // Connect to the second joystick pin
+
+bool pumpOn = false; // Variable to track pump state
+
 void setup() {
   
   radio.begin();
@@ -21,6 +26,7 @@ void setup() {
   radio.setPALevel(RF24_PA_LOW);
   radio.stopListening();
   Serial.begin(9600);
+  pinMode(pumpControlPin, INPUT_PULLUP); // Set the pin to input with internal pull-up resistor
 }
 
 void loop() {
@@ -29,8 +35,11 @@ void loop() {
 
   int xValueServo = analogRead(servoJoystickX);
 
+  // Read the state of the pump control joystick
+  bool pumpButtonPressed = digitalRead(pumpControlPin) == LOW;
+
   // Create data packet
-  int data[3] = {xValue, yValue, xValueServo};
+  int data[4] = {xValue, yValue, xValueServo, pumpButtonPressed};
 
   // Send data packet
   radio.write(&data, sizeof(data));

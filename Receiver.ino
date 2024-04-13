@@ -27,6 +27,9 @@ const int LED3_PIN = 43;
 const int LED4_PIN = 38;
 const int LED5_PIN = 40;
 
+// Water Pump Relay Pin
+const int PUMP_RELAY_PIN = 12; // Connect to the relay control pin
+
 // Current speed of motors
 int currentSpeed = 80;
 
@@ -38,6 +41,7 @@ const int SERVO_PIN = 2;
 
 Servo servo;
 
+bool pumpOn = false;
 bool fireDetected = false;
 
 void setup() {
@@ -60,6 +64,8 @@ void setup() {
 
   pinMode(FLAME_SENSOR_PIN, INPUT);
 
+   pinMode(PUMP_RELAY_PIN, OUTPUT); // Set the pump relay pin as output
+
   servo.attach(SERVO_PIN);
 
   radio.begin();
@@ -75,12 +81,13 @@ void setup() {
 void loop() 
 {
   if (radio.available()) {
-    int data[3];
+    int data[4];
     radio.read(&data, sizeof(data));
 
     int xValue = data[0];
     int yValue = data[1];
     int xValueServo = data[2];
+    bool pumpButtonPressed = data[3];
 
     // Reverse the joystick values
     xValue = 1023 - xValue;
@@ -150,6 +157,17 @@ void loop()
 
       digitalWrite(LED4_PIN, LOW);
       digitalWrite(LED5_PIN, LOW);
+    }
+
+  // Control the water pump relay
+    if (pumpButtonPressed) {
+      if (!pumpOn) {
+        digitalWrite(PUMP_RELAY_PIN, HIGH); // Turn on the water pump
+        pumpOn = true;
+      } else {
+        digitalWrite(PUMP_RELAY_PIN, LOW); // Turn off the water pump
+        pumpOn = false;
+      }
     }
   }
 
