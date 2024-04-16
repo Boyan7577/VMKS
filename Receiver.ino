@@ -38,10 +38,12 @@ const int FLAME_SENSOR_PIN_1 = A0;
 const int FLAME_SENSOR_PIN_2 = A3;
 const int FLAME_SENSOR_PIN_3 = A1;
 
-// Servo motor pin
-const int SERVO_PIN = 2;
+// Servo motor pins
+const int SERVO_PIN_X = 2; // X-axis servo
+const int SERVO_PIN_Y = 13; // Y-axis servo
 
-Servo servo;
+Servo servoX;
+Servo servoY;
 
 bool pumpOn = false;
 bool fireDetected = false;
@@ -70,7 +72,8 @@ void setup() {
 
   pinMode(PUMP_RELAY_PIN, OUTPUT); // Set the pump relay pin as output
 
-  servo.attach(SERVO_PIN);
+  servoX.attach(SERVO_PIN_X);
+  servoY.attach(SERVO_PIN_Y);
 
   radio.begin();
   radio.openReadingPipe(0, address);
@@ -85,13 +88,14 @@ void setup() {
 void loop() 
 {
   if (radio.available()) {
-    int data[4];
+    int data[5];
     radio.read(&data, sizeof(data));
 
     int xValue = data[0];
     int yValue = data[1];
     int xValueServo = data[2];
-    bool pumpButtonPressed = data[3];
+    int yValueServo = data[3];
+    bool pumpButtonPressed = data[4];
 
     // Reverse the joystick values
     xValue = 1023 - xValue;
@@ -105,11 +109,15 @@ void loop()
     
     Serial.print("Servo Control - X Value: ");
     Serial.println(xValueServo);
+    Serial.print("\tY Value: ");
+    Serial.println(yValueServo);
 
     int mappedYSpeed = map(yValue, 0, 1023, -currentSpeed, currentSpeed);
     int mappedXSpeed = map(xValue, 0, 1023, -currentSpeed, currentSpeed);
     int mappedXServo = map(xValueServo, 0, 1023, 45, 135); // Map x-axis value to servo angle
-    servo.write(mappedXServo);
+    int mappedYServo = map(yValueServo, 0, 1023, 45, 135); // Map y-axis value to servo angle
+    servoX.write(mappedXServo);
+    servoY.write(mappedYServo);
 
     int motorSpeedA = mappedYSpeed;
     int motorSpeedB = mappedYSpeed;

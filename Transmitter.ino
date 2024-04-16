@@ -34,12 +34,13 @@ void loop() {
   int yValue = analogRead(joystickY);
 
   int xValueServo = analogRead(servoJoystickX);
+  int yValueServo = analogRead(servoJoystickY);
 
   // Read the state of the pump control joystick
   bool pumpButtonPressed = digitalRead(pumpControlPin) == LOW;
 
   // Create data packet
-  int data[4] = {xValue, yValue, xValueServo, pumpButtonPressed};
+  int data[5] = {xValue, yValue, xValueServo, yValueServo, pumpButtonPressed};
 
   // Send data packet
   radio.write(&data, sizeof(data));
@@ -52,6 +53,8 @@ void loop() {
   
   Serial.print("Servo Control - X Value: ");
   Serial.print(xValueServo);
+  Serial.print("\tY Value: ");
+  Serial.println(yValueServo);
 
   delay(100); // Adjust delay as needed for communication stability
 }
