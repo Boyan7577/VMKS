@@ -14,9 +14,15 @@
 
 ## **Принципна електрическа схема:**
 
+- Controller:
+  
 ![JJ2](https://github.com/Boyan7577/VMKS/assets/107467830/959de94c-bfb8-41c1-8762-b28425e2348c)
 
+
+- FireFighter Robot:
+  
 ![Tank1](https://github.com/Boyan7577/VMKS/assets/107467830/40b50ae1-18c1-44ad-b648-2e3d3a1de3cd)
+
 
 ## **Снимки на проекта:**
 
