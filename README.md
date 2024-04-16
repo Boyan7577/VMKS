@@ -3,7 +3,7 @@
 ![TuesfFest2024](https://github.com/Boyan7577/VMKS/assets/107467830/4f8b0f66-c1f9-4f63-9917-2841d491a742)
 
 
-## **Topic:** FireFighter Project
+## **Topic:** FireFighter Robot
 
 [Presentation Link](https://docs.google.com/presentation/d/1xKrdEx5WutEBlKBfqhGEVZVbmXB95YIFaPxNMCnFgaQ/edit#slide=id.g10f774c2156_0_0)
 
