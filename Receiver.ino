@@ -34,7 +34,9 @@ const int PUMP_RELAY_PIN = 12; // Connect to the relay control pin
 int currentSpeed = 80;
 
 // Flame sensor Pin
-const int FLAME_SENSOR_PIN = A0;
+const int FLAME_SENSOR_PIN_1 = A0; 
+const int FLAME_SENSOR_PIN_2 = A3;
+const int FLAME_SENSOR_PIN_3 = A1;
 
 // Servo motor pin
 const int SERVO_PIN = 2;
@@ -62,9 +64,11 @@ void setup() {
   pinMode(LED4_PIN, OUTPUT);
   pinMode(LED5_PIN, OUTPUT);
 
-  pinMode(FLAME_SENSOR_PIN, INPUT);
+  pinMode(FLAME_SENSOR_PIN_1, INPUT);
+  pinMode(FLAME_SENSOR_PIN_2, INPUT);
+  pinMode(FLAME_SENSOR_PIN_3, INPUT);
 
-   pinMode(PUMP_RELAY_PIN, OUTPUT); // Set the pump relay pin as output
+  pinMode(PUMP_RELAY_PIN, OUTPUT); // Set the pump relay pin as output
 
   servo.attach(SERVO_PIN);
 
@@ -171,9 +175,15 @@ void loop()
     }
   }
 
-  // Check flame sensor
-  int flameSensorValue = analogRead(FLAME_SENSOR_PIN);
-  if (flameSensorValue <= 500) 
+  // Check flame sensor 1
+  int flameSensorValue1 = analogRead(FLAME_SENSOR_PIN_1);
+  // Check flame sensor 2
+  int flameSensorValue2 = analogRead(FLAME_SENSOR_PIN_2);
+  // Check flame sensor 3
+  int flameSensorValue3 = analogRead(FLAME_SENSOR_PIN_3);
+  
+  // Check if any flame sensor detects fire
+  if (flameSensorValue1 <= 500 || flameSensorValue2 <= 500 || flameSensorValue3 <= 500) 
   {
     // Fire detected
     digitalWrite(LED2_PIN, HIGH);
