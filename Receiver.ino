@@ -31,7 +31,7 @@ const int LED5_PIN = 40;
 const int PUMP_RELAY_PIN = 12; // Connect to the relay control pin
 
 // Current speed of motors
-int currentSpeed = 80;
+int currentSpeed = 200;
 
 // Flame sensor Pin
 const int FLAME_SENSOR_PIN_1 = A0; 
