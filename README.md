@@ -31,8 +31,6 @@
 
 ![Tank2-removebg-preview](https://github.com/Boyan7577/VMKS/assets/107467830/4c733e7d-f7bc-46b6-8977-7e4cb325c364)
 
-![peno1](https://github.com/Boyan7577/VMKS/assets/107467830/0a121bf8-5988-494d-a089-e1cc239c6548)
-
 ## **Използвани технологии:**
 
 ![arduino1](https://github.com/Boyan7577/VMKS/assets/107467830/21bf8f8d-2a3c-4a7e-95cd-012b791fbfb0)
