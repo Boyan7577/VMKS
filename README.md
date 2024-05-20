@@ -1,6 +1,6 @@
-## TUES Fest 2024
+## VMKS 2024
 
-![TuesfFest2024](https://github.com/Boyan7577/VMKS/assets/107467830/4f8b0f66-c1f9-4f63-9917-2841d491a742)
+![TuesfFest2024](https://github.com/Boyan7577/VMKS/assets/107467830/81c072d7-977b-4169-8c33-2ae7c829cb2f)
 
 
 ## **Topic:** FireFighter Robot
