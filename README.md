@@ -1,7 +1,4 @@
-<div style="text-align:center">
-    ## VMKS 2024
-</div>
-
+## VMKS 2024
 
 ![TuesfFest2024](https://github.com/Boyan7577/VMKS/assets/107467830/81c072d7-977b-4169-8c33-2ae7c829cb2f)
 
